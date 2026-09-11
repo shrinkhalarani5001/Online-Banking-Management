@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="brand">Bank<span>Ease</span> Admin</div>
+    <div><a href="/admin/dashboard">Admin Dashboard</a><a href="/logout" class="logout">Logout</a></div>
+</nav>
+
+<main class="container">
+    <h1>Administration Dashboard</h1>
+    <p class="muted">Manage customers, accounts and banking activity.</p>
+
+    <section class="cards">
+        <div class="card"><span>Customers</span><h2 th:text="${#lists.size(customers)}"></h2></div>
+        <div class="card"><span>Accounts</span><h2 th:text="${#lists.size(accounts)}"></h2></div>
+        <div class="card"><span>Transactions</span><h2 th:text="${#lists.size(transactions)}"></h2></div>
+    </section>
+
+    <section class="panel">
+        <h2>Customers</h2>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>ID</th><th>Name</th><th>Username</th><th>Email</th><th>Phone</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody>
+                <tr th:each="c : ${customers}">
+                    <td th:text="${c.id}"></td>
+                    <td th:text="${c.fullName}"></td>
+                    <td th:text="${c.username}"></td>
+                    <td th:text="${c.email}"></td>
+                    <td th:text="${c.phone}"></td>
+                    <td th:text="${c.active ? 'ACTIVE' : 'BLOCKED'}"></td>
+                    <td>
+                        <form th:action="@{'/admin/customer/' + ${c.id} + '/toggle'}" method="post">
+                            <button class="btn small" type="submit" th:text="${c.active ? 'Block' : 'Activate'}"></button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="panel">
+        <h2>Bank Accounts</h2>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Account</th><th>Customer</th><th>Type</th><th>Balance</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody>
+                <tr th:each="a : ${accounts}">
+                    <td th:text="${a.accountNumber}"></td>
+                    <td th:text="${a.user.fullName}"></td>
+                    <td th:text="${a.accountType}"></td>
+                    <td>₹ <span th:text="${#numbers.formatDecimal(a.balance, 1, 2)}"></span></td>
+                    <td th:text="${a.status}"></td>
+                    <td>
+                        <form th:action="@{'/admin/account/' + ${a.id} + '/toggle'}" method="post">
+                            <button class="btn small" type="submit" th:text="${a.status == 'ACTIVE' ? 'Block' : 'Activate'}"></button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="panel">
+        <h2>All Transactions</h2>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Date</th><th>Account</th><th>Type</th><th>Amount</th><th>Reference</th><th>Description</th></tr></thead>
+                <tbody>
+                <tr th:each="t : ${transactions}">
+                    <td th:text="${#temporals.format(t.transactionDate, 'dd-MM-yyyy HH:mm')}"></td>
+                    <td th:text="${t.account.accountNumber}"></td>
+                    <td th:text="${t.type}"></td>
+                    <td>₹ <span th:text="${#numbers.formatDecimal(t.amount, 1, 2)}"></span></td>
+                    <td th:text="${t.referenceNumber}"></td>
+                    <td th:text="${t.description}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+</body>
+</html>

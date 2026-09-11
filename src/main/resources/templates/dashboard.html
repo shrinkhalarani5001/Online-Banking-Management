@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Customer Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="brand">Bank<span>Ease</span></div>
+    <div>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/transfer">Transfer</a>
+        <a href="/profile">Profile</a>
+        <a href="/logout" class="logout">Logout</a>
+    </div>
+</nav>
+
+<main class="container">
+    <div class="welcome">
+        <div>
+            <p class="muted">Customer Dashboard</p>
+            <h1>Hello, <span th:text="${user.fullName}"></span> 👋</h1>
+        </div>
+        <div class="account-chip">
+            <small>Account Number</small>
+            <strong th:text="${account.accountNumber}"></strong>
+        </div>
+    </div>
+
+    <div class="alert success" th:if="${param.success}" th:text="${param.success}"></div>
+    <div class="alert error" th:if="${error}" th:text="${error}"></div>
+
+    <section class="cards">
+        <div class="card balance-card">
+            <span>Available Balance</span>
+            <h2>₹ <span th:text="${#numbers.formatDecimal(account.balance, 1, 2)}"></span></h2>
+            <small th:text="${account.status}"></small>
+        </div>
+        <div class="card">
+            <span>Account Type</span>
+            <h2 th:text="${account.accountType}"></h2>
+            <small>Secure savings account</small>
+        </div>
+        <div class="card">
+            <span>Total Transactions</span>
+            <h2 th:text="${#lists.size(transactions)}"></h2>
+            <small>Recorded activity</small>
+        </div>
+    </section>
+
+    <section class="grid-2">
+        <div class="panel">
+            <h2>Quick Deposit</h2>
+            <form method="post" action="/deposit">
+                <input type="number" name="amount" min="1" step="0.01" placeholder="Enter amount" required>
+                <button class="btn primary full">Deposit Money</button>
+            </form>
+        </div>
+        <div class="panel">
+            <h2>Quick Withdrawal</h2>
+            <form method="post" action="/withdraw">
+                <input type="number" name="amount" min="1" step="0.01" placeholder="Enter amount" required>
+                <button class="btn dark full">Withdraw Money</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="section-head">
+            <h2>Recent Transactions</h2>
+            <a href="/transfer" class="btn small">Transfer Money</a>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr><th>Date</th><th>Type</th><th>Reference</th><th>Description</th><th>Amount</th><th>Balance</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="t : ${transactions}">
+                    <td th:text="${#temporals.format(t.transactionDate, 'dd-MM-yyyy HH:mm')}"></td>
+                    <td><span class="badge" th:text="${t.type}"></span></td>
+                    <td th:text="${t.referenceNumber}"></td>
+                    <td th:text="${t.description}"></td>
+                    <td>₹ <span th:text="${#numbers.formatDecimal(t.amount, 1, 2)}"></span></td>
+                    <td>₹ <span th:text="${#numbers.formatDecimal(t.balanceAfter, 1, 2)}"></span></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(transactions)}">
+                    <td colspan="6" class="center muted">No transactions yet.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+</body>
+</html>

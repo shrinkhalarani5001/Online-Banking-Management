@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Profile</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="brand">Bank<span>Ease</span></div>
+    <div>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/transfer">Transfer</a>
+        <a href="/profile">Profile</a>
+        <a href="/logout" class="logout">Logout</a>
+    </div>
+</nav>
+<main class="container narrow">
+    <div class="panel">
+        <h1>My Profile</h1>
+        <div class="profile-row"><span>Full Name</span><strong th:text="${user.fullName}"></strong></div>
+        <div class="profile-row"><span>Username</span><strong th:text="${user.username}"></strong></div>
+        <div class="profile-row"><span>Email</span><strong th:text="${user.email}"></strong></div>
+        <div class="profile-row"><span>Phone</span><strong th:text="${user.phone}"></strong></div>
+        <div class="profile-row"><span>Account Number</span><strong th:text="${account.accountNumber}"></strong></div>
+        <div class="profile-row"><span>Account Type</span><strong th:text="${account.accountType}"></strong></div>
+        <div class="profile-row"><span>Status</span><strong th:text="${account.status}"></strong></div>
+    </div>
+</main>
+</body>
+</html>

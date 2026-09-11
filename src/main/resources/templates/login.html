@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Online Banking - Login</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="auth-body">
+
+<div class="auth-card">
+
+    <div class="brand">Bank<span>Ease</span></div>
+
+    <h1>Welcome Back</h1>
+
+    <p class="muted">
+        Sign in to your online banking account.
+    </p>
+
+    <div class="alert error" th:if="${error}" th:text="${error}"></div>
+
+    <div class="alert success" th:if="${param.registered}">
+        Registration successful. Please login using your username or email.
+    </div>
+
+    <div class="alert success" th:if="${param.logout}">
+        You have been logged out.
+    </div>
+
+    <form method="post" action="/login">
+
+        <label>Username or Email</label>
+
+        <input type="text"
+               name="username"
+               placeholder="Enter username or email"
+               required>
+
+        <label>Password</label>
+
+        <input type="password"
+               name="password"
+               placeholder="Enter password"
+               required>
+
+        <button class="btn primary full" type="submit">
+            Login
+        </button>
+
+    </form>
+
+    <p class="center">
+        New customer?
+        <a href="/register">Create an account</a>
+    </p>
+
+    <div class="demo-box">
+        <strong>Admin Demo</strong><br>
+        Username: admin<br>
+        Password: Admin@2026
+    </div>
+
+</div>
+
+</body>
+</html>
